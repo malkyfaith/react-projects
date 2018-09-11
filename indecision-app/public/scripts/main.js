@@ -8,194 +8,260 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var PDF_URL = 'https://s3-ap-southeast-2.amazonaws.com/lendi-platform/users/9141d3d2-2733-4379-8ce7-63d05399aa8c/credit_report.pdfhttps://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf';
+var IndecisionApp = function (_React$Component) {
+    _inherits(IndecisionApp, _React$Component);
 
-var PDF = function (_React$Component) {
-  _inherits(PDF, _React$Component);
+    function IndecisionApp(props) {
+        _classCallCheck(this, IndecisionApp);
 
-  function PDF(props) {
-    _classCallCheck(this, PDF);
+        var _this = _possibleConstructorReturn(this, (IndecisionApp.__proto__ || Object.getPrototypeOf(IndecisionApp)).call(this, props));
 
-    var _this = _possibleConstructorReturn(this, (PDF.__proto__ || Object.getPrototypeOf(PDF)).call(this, props));
-
-    _this.state = {
-      pdf: null,
-      scale: 1.2
-    };
-    return _this;
-  }
-
-  _createClass(PDF, [{
-    key: 'getChildContext',
-    value: function getChildContext() {
-      return {
-        pdf: this.state.pdf,
-        scale: this.state.scale
-      };
+        console.log('Inside IndecisionApp:', _this.props);
+        _this.title = 'Indecision Application';
+        _this.subtitle = 'Put your life in the hands of computer.';
+        _this.state = {
+            options: ['One', 'Second']
+        };
+        _this.clearAllOptions = _this.clearAllOptions.bind(_this);
+        _this.whatToDo = _this.whatToDo.bind(_this);
+        _this.addOption = _this.addOption.bind(_this);
+        return _this;
     }
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var _this2 = this;
 
-      PDFJS.getDocument(this.props.src).then(function (pdf) {
-        console.log(pdf);
-        _this2.setState({ pdf: pdf });
-      });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return React.createElement(
-        'div',
-        { className: 'pdf-context' },
-        this.props.children
-      );
-    }
-  }]);
+    _createClass(IndecisionApp, [{
+        key: 'clearAllOptions',
+        value: function clearAllOptions() {
+            this.setState(function () {
+                return {
+                    options: []
+                };
+            });
+        }
+    }, {
+        key: 'whatToDo',
+        value: function whatToDo() {
+            var opt = Math.floor(Math.random() * this.state.options.length);
+            var selectedOpt = this.state.options[opt];
+            alert(selectedOpt);
+        }
+    }, {
+        key: 'addOption',
+        value: function addOption(newOption) {
+            if (!newOption) {
+                return "Enter a valid option.";
+            } else if (this.state.options.indexOf(newOption) > -1) {
+                return "This option already exists.";
+            }
 
-  return PDF;
+            this.setState(function (prevState) {
+                return {
+                    options: prevState.options.concat([newOption])
+                };
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return React.createElement(
+                'div',
+                null,
+                React.createElement(Header, { title: this.title, subtitle: this.subtitle }),
+                React.createElement(Action, { hasOptions: this.state.options.length > 0, whatToDo: this.whatToDo }),
+                React.createElement(Options, { options: this.state.options, clearAllOptions: this.clearAllOptions }),
+                React.createElement(AddOption, { addOption: this.addOption })
+            );
+        }
+    }]);
+
+    return IndecisionApp;
 }(React.Component);
 
-PDF.propTypes = {
-  src: React.PropTypes.string.isRequired
-};
+var Header = function (_React$Component2) {
+    _inherits(Header, _React$Component2);
 
-PDF.childContextTypes = {
-  pdf: React.PropTypes.object,
-  scale: React.PropTypes.number
-};
+    function Header() {
+        _classCallCheck(this, Header);
 
-var Page = function (_React$Component2) {
-  _inherits(Page, _React$Component2);
-
-  function Page(props) {
-    _classCallCheck(this, Page);
-
-    var _this3 = _possibleConstructorReturn(this, (Page.__proto__ || Object.getPrototypeOf(Page)).call(this, props));
-
-    _this3.state = {
-      status: 'N/A',
-      page: null,
-      width: 0,
-      height: 0
-    };
-    return _this3;
-  }
-
-  _createClass(Page, [{
-    key: 'shouldComponentUpdate',
-    value: function shouldComponentUpdate(nextProps, nextState, nextContext) {
-      return this.context.pdf != nextContext.pdf || this.state.status !== nextState.status;
+        return _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).apply(this, arguments));
     }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate(nextProps, nextState, nextContext) {
-      this._update(nextContext.pdf);
-    }
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      this._update(this.context.pdf);
-    }
-  }, {
-    key: '_update',
-    value: function _update(pdf) {
-      if (pdf) {
-        this._loadPage(pdf);
-      } else {
-        this.setState({ status: 'loading' });
-      }
-    }
-  }, {
-    key: '_loadPage',
-    value: function _loadPage(pdf) {
-      if (this.state.status === 'rendering' || this.state.page != null) return;
-      pdf.getPage(this.props.index).then(this._renderPage.bind(this));
-      this.setState({ status: 'rendering' });
-    }
-  }, {
-    key: '_renderPage',
-    value: function _renderPage(page) {
-      console.log(page);
-      var scale = this.context.scale;
 
-      var viewport = page.getViewport(scale);
-      var width = viewport.width,
-          height = viewport.height;
+    _createClass(Header, [{
+        key: 'render',
+        value: function render() {
+            return React.createElement(
+                'div',
+                null,
+                React.createElement(
+                    'h1',
+                    null,
+                    this.props.title
+                ),
+                React.createElement(
+                    'h3',
+                    null,
+                    this.props.subtitle
+                )
+            );
+        }
+    }]);
 
-      var canvas = this.refs.canvas;
-      var context = canvas.getContext('2d');
-      console.log(viewport.height, viewport.width);
-      canvas.width = width;
-      canvas.height = height;
-
-      page.render({
-        canvasContext: context,
-        viewport: viewport
-      });
-
-      this.setState({ status: 'rendered', page: page, width: width, height: height });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _state = this.state,
-          width = _state.width,
-          height = _state.height,
-          status = _state.status;
-
-      return React.createElement(
-        'div',
-        { className: 'pdf-page ' + status, style: { width: width, height: height } },
-        React.createElement('canvas', { ref: 'canvas' })
-      );
-    }
-  }]);
-
-  return Page;
+    return Header;
 }(React.Component);
 
-Page.propTypes = {
-  index: React.PropTypes.number.isRequired
-};
-Page.contextTypes = PDF.childContextTypes;
+var Action = function (_React$Component3) {
+    _inherits(Action, _React$Component3);
 
-var Viewer = function (_React$Component3) {
-  _inherits(Viewer, _React$Component3);
+    function Action(props) {
+        _classCallCheck(this, Action);
 
-  function Viewer() {
-    _classCallCheck(this, Viewer);
+        var _this3 = _possibleConstructorReturn(this, (Action.__proto__ || Object.getPrototypeOf(Action)).call(this, props));
 
-    return _possibleConstructorReturn(this, (Viewer.__proto__ || Object.getPrototypeOf(Viewer)).apply(this, arguments));
-  }
-
-  _createClass(Viewer, [{
-    key: 'render',
-    value: function render() {
-      var pdf = this.context.pdf;
-
-      var numPages = pdf ? pdf.pdfInfo.numPages : 0;
-      var fingerprint = pdf ? pdf.pdfInfo.fingerprint : 'none';
-      var pages = Array.apply(null, { length: numPages }).map(function (v, i) {
-        return React.createElement(Page, { index: i + 1, key: fingerprint + '-' + i });
-      });
-
-      return React.createElement(
-        'div',
-        { className: 'pdf-viewer' },
-        pages
-      );
+        console.log('Inside Action:', _this3.props);
+        return _this3;
     }
-  }]);
 
-  return Viewer;
+    _createClass(Action, [{
+        key: 'render',
+        value: function render() {
+            return React.createElement(
+                'div',
+                null,
+                React.createElement(
+                    'button',
+                    { disabled: !this.props.hasOptions, onClick: this.props.whatToDo },
+                    'What should I do?'
+                )
+            );
+        }
+    }]);
+
+    return Action;
 }(React.Component);
 
-Viewer.contextTypes = PDF.childContextTypes;
+var Options = function (_React$Component4) {
+    _inherits(Options, _React$Component4);
 
-React.render(React.createElement(
-  PDF,
-  { src: PDF_URL },
-  React.createElement(Viewer, null)
-), document.getElementById('app'));
+    function Options(props) {
+        _classCallCheck(this, Options);
+
+        var _this4 = _possibleConstructorReturn(this, (Options.__proto__ || Object.getPrototypeOf(Options)).call(this, props));
+
+        console.log('Inside Options:', _this4.props);
+        return _this4;
+    }
+
+    _createClass(Options, [{
+        key: 'render',
+        value: function render() {
+            return React.createElement(
+                'div',
+                null,
+                React.createElement(
+                    'button',
+                    { onClick: this.props.clearAllOptions },
+                    'Clear all'
+                ),
+                React.createElement(
+                    'ul',
+                    null,
+                    this.props.options.map(function (o) {
+                        return React.createElement(Option, { option: o });
+                    })
+                )
+            );
+        }
+    }]);
+
+    return Options;
+}(React.Component);
+
+var Option = function (_React$Component5) {
+    _inherits(Option, _React$Component5);
+
+    function Option() {
+        _classCallCheck(this, Option);
+
+        return _possibleConstructorReturn(this, (Option.__proto__ || Object.getPrototypeOf(Option)).apply(this, arguments));
+    }
+
+    _createClass(Option, [{
+        key: 'render',
+        value: function render() {
+            return React.createElement(
+                'li',
+                null,
+                this.props.option
+            );
+        }
+    }]);
+
+    return Option;
+}(React.Component);
+
+var AddOption = function (_React$Component6) {
+    _inherits(AddOption, _React$Component6);
+
+    function AddOption(props) {
+        _classCallCheck(this, AddOption);
+
+        var _this6 = _possibleConstructorReturn(this, (AddOption.__proto__ || Object.getPrototypeOf(AddOption)).call(this, props));
+
+        _this6.onFormSubmit = _this6.onFormSubmit.bind(_this6);
+        // console.log('Inside AddOption:', this.props);
+        _this6.state = {
+            error: undefined
+        };
+        return _this6;
+    }
+
+    _createClass(AddOption, [{
+        key: 'onFormSubmit',
+        value: function onFormSubmit(e) {
+            e.preventDefault();
+            var val = e.target.elements.option.value.trim();
+            e.target.elements.option.value = '';
+
+            var error = this.props.addOption(val);
+            //console.log(error);
+
+            this.setState(function () {
+                return {
+                    error: error
+                };
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return React.createElement(
+                'div',
+                null,
+                this.state.error && React.createElement(
+                    'p',
+                    null,
+                    this.state.error
+                ),
+                React.createElement(
+                    'form',
+                    { onSubmit: this.onFormSubmit },
+                    React.createElement('input', { type: 'text', name: 'option' }),
+                    React.createElement(
+                        'button',
+                        null,
+                        'Add option'
+                    )
+                )
+            );
+        }
+    }]);
+
+    return AddOption;
+}(React.Component);
+
+var jsx = React.createElement(
+    'div',
+    null,
+    React.createElement(IndecisionApp, null)
+);
+
+ReactDOM.render(jsx, document.getElementById('app'));

@@ -27,7 +27,11 @@ class IndecisionApp extends React.Component {
     }
 
     addOption(newOption) {
-        console.log(newOption);
+        if(!newOption) {
+            return "Enter a valid option.";
+        } else if(this.state.options.indexOf(newOption) > -1) {
+            return "This option already exists."
+        } 
         
         this.setState((prevState) => {
             return {
@@ -103,20 +107,31 @@ class AddOption extends React.Component {
     constructor(props) {
         super(props);
         this.onFormSubmit = this.onFormSubmit.bind(this);
-        console.log('Inside AddOption:', this.props);
+        // console.log('Inside AddOption:', this.props);
+        this.state = {
+            error: undefined
+        }
     }
 
     onFormSubmit(e) {
         e.preventDefault();
         var val = e.target.elements.option.value.trim();
-        console.log(val);
-        this.props.addOption(val);
         e.target.elements.option.value = '';
 
+        const error = this.props.addOption(val);
+        //console.log(error);
+
+        this.setState(() =>{
+            return {
+                error
+            }
+        })
+        
     }
     render() {
         return (
             <div>
+                {this.state.error && <p>{this.state.error}</p>}
                 <form onSubmit={this.onFormSubmit}>
                     <input type="text" name="option" />
                     <button>Add option</button>
