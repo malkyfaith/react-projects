@@ -1,2 +1,6 @@
-render-pdf/
-indecision-app/
+indecision-app/*
+indecision-app/node_modules
+indecision-app/.vscode
+render-pdf/*
+render-pdf/node_modules
+render-pdf/*
