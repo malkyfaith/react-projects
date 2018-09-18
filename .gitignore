@@ -4,3 +4,7 @@ indecision-app/.vscode
 render-pdf/*
 render-pdf/node_modules
 render-pdf/*
+
+hello-react-redux/*
+hello-react-redux/node_modules
+hello-react-redux/*
