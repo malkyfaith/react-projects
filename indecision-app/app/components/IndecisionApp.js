@@ -5,28 +5,17 @@ import Action from './Action';
 import Header from './Header';
 
 export default class IndecisionApp extends React.Component {
-
-    constructor(props) {
-        super(props);
-        console.log('Inside IndecisionApp:', this.props);
-        this.title = 'Indecision Application';
-        this.subtitle = 'Put your life in the hands of computer.'
-        this.state = {
-            options: props.options
-        }
-        this.clearAllOptions = this.clearAllOptions.bind(this);
-        this.clearOption = this.clearOption.bind(this);
-        this.whatToDo = this.whatToDo.bind(this);
-        this.addOption = this.addOption.bind(this);
+    title = 'Indecision Application';
+    subtitle = 'Put your life in the hands of computer.'
+    state = {
+        options: this.props.options
     }
 
-    clearAllOptions() {
+    clearAllOptions = () => {
         this.setState(() => { return { options: [] } })
     }
     
-    clearOption(option) {
-        console.log(option);
-
+    clearOption = (option) => {
         this.setState((prevState) => {
             return {
                 options: prevState.options.filter((o) => o !== option)
@@ -34,15 +23,13 @@ export default class IndecisionApp extends React.Component {
         })
     }
 
-    whatToDo() {
+    whatToDo = () =>  {
         let opt = Math.floor(Math.random() * this.state.options.length);
         const selectedOpt = this.state.options[opt];
         alert(selectedOpt);
     }
 
-    addOption(newOption) {
-        // console.log(testing);
-        
+    addOption = (newOption) =>  {
         if (!newOption) {
             return "Enter a valid option.";
         } else if (this.state.options.indexOf(newOption) > -1) {
