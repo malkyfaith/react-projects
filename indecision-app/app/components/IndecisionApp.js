@@ -3,12 +3,13 @@ import AddOption from './AddOption';
 import Options from './Options';
 import Action from './Action';
 import Header from './Header';
-
+import OptionModal from './OptionModal';
 export default class IndecisionApp extends React.Component {
     title = 'Indecision Application';
     subtitle = 'Put your life in the hands of computer.'
     state = {
-        options: this.props.options
+        options: this.props.options,
+        selectedOption: undefined
     }
 
     clearAllOptions = () => {
@@ -26,7 +27,12 @@ export default class IndecisionApp extends React.Component {
     whatToDo = () =>  {
         let opt = Math.floor(Math.random() * this.state.options.length);
         const selectedOpt = this.state.options[opt];
-        alert(selectedOpt);
+        // alert(selectedOpt);
+        this.setState(() => {
+            return {
+                selectedOption: selectedOpt
+            }
+        })
     }
 
     addOption = (newOption) =>  {
@@ -39,6 +45,14 @@ export default class IndecisionApp extends React.Component {
         this.setState((prevState) => {
             return {
                 options: prevState.options.concat([newOption])
+            }
+        })
+    }
+
+    closeModal = () => {
+        this.setState(() => {
+            return {
+                selectedOption: undefined 
             }
         })
     }
@@ -57,6 +71,9 @@ export default class IndecisionApp extends React.Component {
                     clearOption={this.clearOption} />
                 <AddOption
                     addOption={this.addOption} />
+                    <OptionModal
+                        selectedOption={this.state.selectedOption}
+                        closeModal={this.closeModal}/>
             </div>
         );
     }
