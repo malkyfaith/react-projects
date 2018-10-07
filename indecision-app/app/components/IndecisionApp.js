@@ -15,7 +15,7 @@ export default class IndecisionApp extends React.Component {
     clearAllOptions = () => {
         this.setState(() => { return { options: [] } })
     }
-    
+
     clearOption = (option) => {
         this.setState((prevState) => {
             return {
@@ -24,7 +24,7 @@ export default class IndecisionApp extends React.Component {
         })
     }
 
-    whatToDo = () =>  {
+    whatToDo = () => {
         let opt = Math.floor(Math.random() * this.state.options.length);
         const selectedOpt = this.state.options[opt];
         // alert(selectedOpt);
@@ -35,7 +35,7 @@ export default class IndecisionApp extends React.Component {
         })
     }
 
-    addOption = (newOption) =>  {
+    addOption = (newOption) => {
         if (!newOption) {
             return "Enter a valid option.";
         } else if (this.state.options.indexOf(newOption) > -1) {
@@ -52,7 +52,7 @@ export default class IndecisionApp extends React.Component {
     closeModal = () => {
         this.setState(() => {
             return {
-                selectedOption: undefined 
+                selectedOption: undefined
             }
         })
     }
@@ -62,18 +62,20 @@ export default class IndecisionApp extends React.Component {
                 <Header
                     title={this.title}
                     subtitle={this.subtitle} />
-                <Action
-                    hasOptions={this.state.options.length > 0}
-                    whatToDo={this.whatToDo} />
-                <Options
-                    options={this.state.options}
-                    clearAllOptions={this.clearAllOptions}
-                    clearOption={this.clearOption} />
-                <AddOption
-                    addOption={this.addOption} />
-                    <OptionModal
-                        selectedOption={this.state.selectedOption}
-                        closeModal={this.closeModal}/>
+                <div className="container">
+                    <Action
+                        hasOptions={this.state.options.length > 0}
+                        whatToDo={this.whatToDo} />
+                    <Options
+                        options={this.state.options}
+                        clearAllOptions={this.clearAllOptions}
+                        clearOption={this.clearOption} />
+                    <AddOption
+                        addOption={this.addOption} />
+                </div>
+                <OptionModal
+                    selectedOption={this.state.selectedOption}
+                    closeModal={this.closeModal} />
             </div>
         );
     }
