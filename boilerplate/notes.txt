@@ -1,0 +1,4 @@
+// babel command to convert es6 to es5 compatible code.
+babel app/app.js --out-file=public/scripts/main.js --presets=env,react --watch
+
+live-server
