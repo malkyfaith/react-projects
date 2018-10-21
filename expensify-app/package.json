@@ -13,15 +13,16 @@
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-modal": "^3.6.1",
+    "react-redux": "^5.0.7",
     "react-router-dom": "4.2.2",
+    "redux": "^4.0.1",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.0",
     "webpack": "^4.19.1",
     "webpack-dev-server": "^3.1.8"
   },
   "scripts": {
-    "build-babel": "babel app/app.js --out-file=public/scripts/main.js --presets=env,react --watch",
-    "serve": "webpack-dev-server",
+    "dev-serve": "webpack-dev-server",
     "build": "webpack --watch"
   },
   "name": "boilerplate-app",
